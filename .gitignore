@@ -1,23 +1,28 @@
-# eclipse
-bin
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# idea
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# eclipse / vscode
+bin/
 *.launch
-.settings
-.metadata
+.settings/
+.vscode/
 .classpath
 .project
 
-# idea
-out
-*.ipr
-*.iws
-*.iml
-.idea/*
-!.idea/scopes
+# run directory
+run/
 
-# gradle
-build
-.gradle
-
-# other
-eclipse
-
+# java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
