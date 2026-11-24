@@ -13,12 +13,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - project: "1.20.1-fabric"
-            mc_version: "1.20.1"
-            game_versions: "1.20.1"
-            loader: "fabric"
-            loader_name: "Fabric"
-            java: 17
           - project: "1.21.1-fabric"
             mc_version: "1.21.1"
             game_versions: |

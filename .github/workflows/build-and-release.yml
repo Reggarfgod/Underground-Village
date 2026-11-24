@@ -60,13 +60,6 @@ jobs:
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Set up Java 17
-        if: steps.check_tag.outputs.exists == 'false'
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
-
       - name: Set up Java 21
         if: steps.check_tag.outputs.exists == 'false'
         uses: actions/setup-java@v4
@@ -98,7 +91,7 @@ jobs:
             sed -i '/^org\.gradle\.java\.home/d' gradle.properties
           fi
 
-          echo "=== Building Stonecutter projects (1.20.1, 1.21.1, 26.1, 26.3) ==="
+          echo "=== Building Stonecutter projects (1.21.1, 26.1, 26.3) ==="
           ./gradlew build -x test --no-daemon
 
       - name: Collect Subproject Artifacts
