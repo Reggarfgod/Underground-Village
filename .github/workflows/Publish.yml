@@ -1,0 +1,169 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Target version/loader to publish'
+        required: true
+        type: choice
+        default: 'all'
+        options:
+          - 'all'
+          - '1.21.1-fabric'
+          - '1.21.1-neoforge'
+          - '26.1-fabric'
+          - '26.1-neoforge'
+          - '26.3-fabric'
+          - '26.3-neoforge'
+          - 'all-fabric'
+          - 'all-neoforge'
+          - '1.21.1-both'
+          - '26.1-both'
+          - '26.3-both'
+      publish_curseforge:
+        description: 'Publish to CurseForge'
+        required: true
+        type: boolean
+        default: true
+      publish_modrinth:
+        description: 'Publish to Modrinth'
+        required: true
+        type: boolean
+        default: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: "1.21.1-fabric"
+            mc_version: "1.21.1"
+            game_versions: |
+              1.21
+              1.21.1
+            loader: "fabric"
+            loader_name: "Fabric"
+          - project: "1.21.1-neoforge"
+            mc_version: "1.21.1"
+            game_versions: |
+              1.21
+              1.21.1
+            loader: "neoforge"
+            loader_name: "NeoForge"
+          - project: "26.1-fabric"
+            mc_version: "26.1"
+            game_versions: "26.1"
+            loader: "fabric"
+            loader_name: "Fabric"
+          - project: "26.1-neoforge"
+            mc_version: "26.1"
+            game_versions: "26.1"
+            loader: "neoforge"
+            loader_name: "NeoForge"
+          - project: "26.3-fabric"
+            mc_version: "26.3"
+            game_versions: "26.3"
+            loader: "fabric"
+            loader_name: "Fabric"
+          - project: "26.3-neoforge"
+            mc_version: "26.3"
+            game_versions: "26.3"
+            loader: "neoforge"
+            loader_name: "NeoForge"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Filter target
+        id: filter
+        run: |
+          TARGET="${{ inputs.target || 'all' }}"
+          PROJECT="${{ matrix.project }}"
+          LOADER="${{ matrix.loader }}"
+          MC="${{ matrix.mc_version }}"
+
+          if [ "${{ github.event_name }}" = "push" ] || \
+             [ "$TARGET" = "all" ] || \
+             [ "$TARGET" = "$PROJECT" ] || \
+             [ "$TARGET" = "all-fabric" -a "$LOADER" = "fabric" ] || \
+             [ "$TARGET" = "all-neoforge" -a "$LOADER" = "neoforge" ] || \
+             [ "$TARGET" = "1.21.1-both" -a "$MC" = "1.21.1" ] || \
+             [ "$TARGET" = "26.1-both" -a "$MC" = "26.1" ] || \
+             [ "$TARGET" = "26.3-both" -a "$MC" = "26.3" ]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+            echo "Proceeding with $PROJECT"
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "Skipping $PROJECT (target filter: $TARGET)"
+          fi
+
+      - name: Determine mod version
+        if: steps.filter.outputs.should_run == 'true'
+        id: mod_info
+        run: |
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            TAG="${{ github.ref_name }}"
+          else
+            VERSION=$(grep -E "^mod\.version\s*=" stonecutter.properties.toml | cut -d'"' -f2 | tr -d '[:space:]')
+            TAG="v${VERSION}"
+          fi
+          CLEAN_VERSION="${TAG#v}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${CLEAN_VERSION}" >> $GITHUB_OUTPUT
+          echo "Version: ${CLEAN_VERSION} (Tag: ${TAG})"
+
+      - name: Set up JDK 21
+        if: steps.filter.outputs.should_run == 'true'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: "temurin"
+
+      - name: Set up JDK 25 (Default JAVA_HOME)
+        if: steps.filter.outputs.should_run == 'true'
+        uses: actions/setup-java@v4
+        with:
+          java-version: '25'
+          distribution: "temurin"
+
+      - name: Setup Gradle
+        if: steps.filter.outputs.should_run == 'true'
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant execute permission for gradlew
+        if: steps.filter.outputs.should_run == 'true'
+        run: chmod +x gradlew
+
+      - name: Build :${{ matrix.project }}
+        if: steps.filter.outputs.should_run == 'true'
+        run: |
+          # Strip local developer Java home path if present
+          if [ -f "gradle.properties" ]; then
+            sed -i '/^org\.gradle\.java\.home/d' gradle.properties
+          fi
+
+          ./gradlew :${{ matrix.project }}:build -x test --no-daemon
+
+      - name: Publish to CurseForge & Modrinth
+        if: steps.filter.outputs.should_run == 'true'
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && (secrets.MODRINTH_PROJECT_ID || 'underground-villages-stoneholm') || '' }}
+          modrinth-token: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && secrets.MODRINTH_TOKEN || '' }}
+          curseforge-id: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && (secrets.CURSEFORGE_PROJECT_ID || '1123746') || '' }}
+          curseforge-token: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && secrets.CURSEFORGE_TOKEN || '' }}
+          files: versions/${{ matrix.project }}/build/libs/!(*-@(sources|dev)).jar
+          game-versions: ${{ matrix.game_versions }}
+          loaders: ${{ matrix.loader }}
+          version: ${{ steps.mod_info.outputs.tag }}+${{ matrix.project }}
+          name: Underground Village ${{ steps.mod_info.outputs.version }} for ${{ matrix.mc_version }} (${{ matrix.loader_name }})
+          changelog-file: Changelog.md
