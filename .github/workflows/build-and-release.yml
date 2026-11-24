@@ -64,19 +64,19 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Java 25
-        if: steps.check_tag.outputs.exists == 'false'
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '25'
-
-      - name: Set up Java 21 (Default JAVA_HOME)
+      - name: Set up Java 21
         if: steps.check_tag.outputs.exists == 'false'
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
+
+      - name: Set up Java 25 (Default JAVA_HOME)
+        if: steps.check_tag.outputs.exists == 'false'
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
 
       - name: Setup Gradle
         if: steps.check_tag.outputs.exists == 'false'
@@ -96,7 +96,7 @@ jobs:
           # Strip local developer Java home path if present
           sed -i '/^org\.gradle\.java\.home/d' gradle.properties
 
-          echo "=== Building root multi-version projects (1.20.1, 1.21.1, 1.21.11, 26.1) ==="
+          echo "=== Building Stonecutter projects (1.21.1, 26.1, 26.3) ==="
           ./gradlew build -x test --no-daemon
 
           if [ -f "26.1/forge/gradlew" ]; then
