@@ -158,7 +158,7 @@ jobs:
         with:
           modrinth-id: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && (secrets.MODRINTH_PROJECT_ID || 'underground-villages-stoneholm') || '' }}
           modrinth-token: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && secrets.MODRINTH_TOKEN || '' }}
-          curseforge-id: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && (secrets.CURSEFORGE_PROJECT_ID || 'underground-villages-stoneholm') || '' }}
+          curseforge-id: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && (secrets.CURSEFORGE_PROJECT_ID || '1123746') || '' }}
           curseforge-token: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && secrets.CURSEFORGE_TOKEN || '' }}
           files: versions/${{ matrix.project }}/build/libs/!(*-@(sources|dev)).jar
           game-versions: ${{ matrix.game_versions }}
