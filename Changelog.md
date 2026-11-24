@@ -77,3 +77,27 @@ checkout full changelogs with image on discord :- https://discord.gg/JBFNW3wdTm
 - Chests no longer accelerate progression
 - Exploration feels grounded and fair
 - Loot matches abandoned / common structure theme
+
+------------------------------------------------------------------------------------------------------------
+# [Version:3.1.1]
+
+Minecraft Version: 1.20.1, 1.21.1, 26.1, 26.3 ( Neoforge and Fabric )
+Date: Nov 24, 2026
+
+The Update will be live soon :- https://www.curseforge.com/minecraft/mc-mods/underground-villages-stoneholm
+checkout full changelogs with image on discord :- https://discord.gg/JBFNW3wdTm
+
+## Added / Improved
+
+- Multi-version architecture supporting 1.20.1, 1.21.1, 26.1, and 26.3 on both Fabric and NeoForge
+- Upgraded configuration system to Better Library format with YAML config
+- Interactive in-game Config Screen with categorized tabs (Underground, Water Structures, Structure Placement, Messages)
+- ModMenu (Fabric) and NeoForge config screen integration
+- Dynamic window placement in `afterPlace` replacing pink concrete placeholder blocks with stained glass panes or iron bars
+- Optimized structure spawning checks to ensure reliable village generation without terrain lag
+- Enabled expansion hack for subterranean structure generation from surface entrances
+
+## Fixed
+
+- Added mod-loaded conditions to worker loot tables to prevent crashes when Create is not installed
+- Added automated processor list codec translation for 26.3 (`Name`/`Properties` -> `id`/`properties`)
