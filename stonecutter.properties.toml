@@ -50,7 +50,7 @@ deps.better_lib = "9320152"
 
 ["26.3"]
 mod.mc_releases = ["26.3"]
-deps.modmenu = "18.0.2"
+deps.modmenu = "21.0.1"
 
 [fabric."26.3"]
 mod.mc_compat = ">=26.3"

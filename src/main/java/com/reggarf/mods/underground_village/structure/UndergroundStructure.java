@@ -135,13 +135,13 @@ public class UndergroundStructure extends Structure {
                             Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter(s -> 0),
 
                             DimensionPadding.CODEC.optionalFieldOf(
-                                    "dimension_padding",
-                                    JigsawStructure.DEFAULT_DIMENSION_PADDING
+                                     "dimension_padding",
+                                     JigsawStructure.DEFAULT_DIMENSION_PADDING
                             ).forGetter(s -> s.dimensionPadding),
 
                             LiquidSettings.CODEC.optionalFieldOf(
-                                    "liquid_settings",
-                                    JigsawStructure.DEFAULT_LIQUID_SETTINGS
+                                     "liquid_settings",
+                                     JigsawStructure.DEFAULT_LIQUID_SETTINGS
                             ).forGetter(s -> s.liquidSettings)
                     ).apply(instance, UndergroundStructure::new)
             );
@@ -286,15 +286,27 @@ public class UndergroundStructure extends Structure {
 
     @Override
     public void afterPlace(WorldGenLevel world, StructureManager structureManager, ChunkGenerator chunkGenerator, RandomSource random, BoundingBox box, ChunkPos chunkPos, PiecesContainer pieces) {
-        net.minecraft.world.level.block.Block newBlock = BARS[random.nextInt(BARS.length)];
-
         pieces.pieces().forEach(structurePiece -> {
             BoundingBox boundingBox = structurePiece.getBoundingBox();
+
+            int minX = Math.max(boundingBox.minX(), box.minX());
+            int maxX = Math.min(boundingBox.maxX(), box.maxX());
+            int minY = Math.max(boundingBox.minY(), box.minY());
+            int maxY = Math.min(boundingBox.maxY(), box.maxY());
+            int minZ = Math.max(boundingBox.minZ(), box.minZ());
+            int maxZ = Math.min(boundingBox.maxZ(), box.maxZ());
+
+            if (minX > maxX || minY > maxY || minZ > maxZ) {
+                return;
+            }
+
+            RandomSource pieceRandom = RandomSource.create(boundingBox.hashCode());
+            net.minecraft.world.level.block.Block newBlock = BARS[pieceRandom.nextInt(BARS.length)];
             BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos();
 
-            for (int x = boundingBox.minX(); x <= boundingBox.maxX(); x++) {
-                for (int y = boundingBox.minY(); y <= boundingBox.maxY(); y++) {
-                    for (int z = boundingBox.minZ(); z <= boundingBox.maxZ(); z++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int y = minY; y <= maxY; y++) {
+                    for (int z = minZ; z <= maxZ; z++) {
                         blockPos.set(x, y, z);
                         BlockState blockState = world.getBlockState(blockPos);
                         //? if >=26.3 {
@@ -320,10 +332,10 @@ public class UndergroundStructure extends Structure {
                                     }
                                 }
 
-                                world.setBlock(blockPos, newState, net.minecraft.world.level.block.Block.UPDATE_ALL);
+                                world.setBlock(blockPos, newState, net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
                             } else {
                                 BlockState adjacentState = world.getBlockState(blockPos.relative(Direction.DOWN));
-                                world.setBlock(blockPos, adjacentState.getBlock().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_ALL);
+                                world.setBlock(blockPos, adjacentState.getBlock().defaultBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
                             }
                         }
                     }
