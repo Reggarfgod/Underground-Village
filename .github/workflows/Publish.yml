@@ -157,7 +157,7 @@ jobs:
         if: steps.filter.outputs.should_run == 'true'
         uses: Kir-Antipov/mc-publish@v3.3
         with:
-          modrinth-id: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && (secrets.MODRINTH_PROJECT_ID || 'underground-villages-stoneholm') || '' }}
+          modrinth-id: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && (secrets.MODRINTH_PROJECT_ID || 'KmyhssPl') || '' }}
           modrinth-token: ${{ (github.event_name == 'push' || inputs.publish_modrinth) && secrets.MODRINTH_TOKEN || '' }}
           curseforge-id: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && (secrets.CURSEFORGE_PROJECT_ID || '1123746') || '' }}
           curseforge-token: ${{ (github.event_name == 'push' || inputs.publish_curseforge) && secrets.CURSEFORGE_TOKEN || '' }}
