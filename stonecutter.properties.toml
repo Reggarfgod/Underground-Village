@@ -1,7 +1,7 @@
 mod.id = "underground_village"
 mod.name = "Underground Village, Stoneholm"
 mod.group = "com.reggarf.mods"
-mod.version = "2.1.2"
+mod.version = "3.1.1"
 
 deps.fabric_loader = "0.18.4"
 loomx.loom_version = "1.19-SNAPSHOT"
