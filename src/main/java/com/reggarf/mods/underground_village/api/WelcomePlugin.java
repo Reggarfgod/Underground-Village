@@ -43,7 +43,7 @@ public class WelcomePlugin implements WelcomePopupPlugin {
                 .theme(PopupTheme.RUSTIC)
                 .accentColor(0xF7C742)
                 .addText("Underground Villages! adds naturally generated villages deep below the surface.", 0xFFFFFF)
-                .addText("Need help, found a bug, or missing a recipe or structure? Use the links below to get support and stay updated:", 0xCCCCCC)
+                .addText("Need help, found a bug, or missing a recipe or structure? Use command !report or the links below to get support and stay updated:", 0xCCCCCC)
                 .addBlankLine()
                 .highlightBox("ZAP-HOSTING CODE", "Reggarf-1047", "20% OFF", "Click to copy promo code")
                 .addButton(WelcomePopupButton.discord("https://discord.gg/kb6BntpcYq"))
