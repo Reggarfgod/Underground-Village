@@ -1,0 +1,98 @@
+name: Bug report
+description: File a bug report for Underground Village, Stoneholm
+labels: [bug, triage]
+assignees:
+  - Reggarf
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > [!WARNING]  
+        > This form is **only for bug reports**!
+        > Please don't use this for feature requests or questions.
+        > Issues that do not follow this template or lack logs may be closed without investigation.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug description
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: dropdown
+    id: mc_version
+    attributes:
+      label: Minecraft version
+      description: Select the Minecraft version you are running.
+      options:
+        - "26.3"
+        - "26.1"
+        - "1.21.1"
+        - "1.20.1"
+        - Other (specify in description)
+    validations:
+      required: true
+  - type: dropdown
+    id: mod_loader
+    attributes:
+      label: Mod loader
+      description: Select which mod loader you are using.
+      options:
+        - Fabric
+        - NeoForge
+        - Forge
+    validations:
+      required: true
+  - type: input
+    id: mod_loader_version
+    attributes:
+      label: Mod loader version
+      description: Exact version of Fabric, NeoForge, or Forge.
+      placeholder: e.g. Fabric Loader 0.20.1 / NeoForge 21.1.252
+    validations:
+      required: true
+  - type: input
+    id: mod_version
+    attributes:
+      label: Underground Village version
+      description: The version of Underground Village, Stoneholm installed.
+      placeholder: e.g. 3.1.1
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Steps to reproduce the issue.
+        Please ensure the bug is consistently reproducible.
+      placeholder: |
+        1. Create a new world with default settings.
+        2. Run /locate structure underground_village:underground_village
+        3. Teleport to the structure.
+        4. Observe the issue...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: A clear description of what you expected to happen.
+    validations:
+      required: false
+  - type: input
+    id: logs
+    attributes:
+      label: Log / Crash report URL
+      description: |
+        Please paste the link to your `latest.log` or `crash-report.txt`.
+        Upload using [mclo.gs](https://mclo.gs/) or [gist.github.com](https://gist.github.com/). Do not paste raw logs directly here.
+      placeholder: https://mclo.gs/example or https://gist.github.com/example/example
+    validations:
+      required: false
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / Videos
+      description: Drag and drop screenshots or paste video links demonstrating the setup and bug.
+    validations:
+      required: false

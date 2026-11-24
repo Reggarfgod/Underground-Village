@@ -1,0 +1,38 @@
+name: Translation
+description: Submit a translation for Underground Village, Stoneholm
+labels: [translation]
+assignees:
+  - Reggarf
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for contributing a translation!
+        Make sure to reference the base English language file (`en_us.json`) located in `src/main/resources/assets/underground_village/lang/en_us.json` for current keys.
+  - type: input
+    id: locale_code
+    attributes:
+      label: Locale code
+      description: The standard Minecraft locale code (e.g. `de_de`, `ru_ru`, `zh_cn`). See [Minecraft Wiki](https://minecraft.wiki/w/Language#Languages) for valid codes.
+      placeholder: de_de
+    validations:
+      required: true
+  - type: textarea
+    id: translation
+    attributes:
+      label: Translation JSON
+      description: The full JSON contents of your translation file.
+      render: json
+      placeholder: |
+        {
+          "config.underground_village.title": "Underground Village Config"
+        }
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Context on specific phrasing choices, untested keys, or notes for the maintainer.
+    validations:
+      required: false
