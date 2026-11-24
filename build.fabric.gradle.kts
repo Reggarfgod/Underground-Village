@@ -27,17 +27,14 @@ repositories {
 }
 
 dependencies {
-    fun fapi(vararg modules: String) {
-        for (it in modules) modImplementation(fabricApi.module(it, sc.properties["deps.fabric_api"]))
-    }
-
     minecraft("com.mojang:minecraft:${sc.current.version}")
     loomx.applyMojangMappings()
 
     modImplementation("net.fabricmc:fabric-loader:${sc.properties["deps.fabric_loader"]}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${sc.properties["deps.fabric_api"]}")
     modImplementation("curse.maven:better-library-1150683:${sc.properties["deps.better_lib"]}")
     modCompileOnly("com.terraformersmc:modmenu:${sc.properties["deps.modmenu"]}")
-    fapi("fabric-lifecycle-events-v1", "fabric-resource-loader-v0", "fabric-content-registries-v0", "fabric-registry-sync-v0")
+    modLocalRuntime("com.terraformersmc:modmenu:${sc.properties["deps.modmenu"]}")
 }
 
 loom {

@@ -3,7 +3,7 @@ mod.name = "Underground Village, Stoneholm"
 mod.group = "com.reggarf.mods"
 mod.version = "3.1.1"
 
-deps.fabric_loader = "0.18.4"
+deps.fabric_loader = "0.20.1"
 loomx.loom_version = "1.19-SNAPSHOT"
 
 ["1.20.1"]
@@ -39,7 +39,7 @@ mod.mc_releases = ["26.1"]
 deps.modmenu = "18.0.2"
 
 [fabric."26.1"]
-mod.mc_compat = "~26.1"
+mod.mc_compat = ">=26.1"
 deps.fabric_api = "0.144.0+26.1"
 deps.better_lib = "9320149"
 
@@ -53,7 +53,7 @@ mod.mc_releases = ["26.3"]
 deps.modmenu = "18.0.2"
 
 [fabric."26.3"]
-mod.mc_compat = "~26.3"
+mod.mc_compat = ">=26.3"
 deps.fabric_api = "0.165.2+26.3"
 deps.better_lib = "9322281"
 
