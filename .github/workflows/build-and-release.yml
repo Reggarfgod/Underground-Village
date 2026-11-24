@@ -25,12 +25,9 @@ jobs:
       - name: Read mod version from gradle.properties
         id: mod_info
         run: |
-          VERSION=$(grep -E "^version\s*=" gradle.properties 2>/dev/null | cut -d'=' -f2 | tr -d '[:space:]')
+          VERSION=$(grep -E "^version\s*=" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
           if [ -z "$VERSION" ]; then
-            VERSION=$(grep -E "^mod_version\s*=" gradle.properties 2>/dev/null | cut -d'=' -f2 | tr -d '[:space:]')
-          fi
-          if [ -z "$VERSION" ] && [ -f "stonecutter.properties.toml" ]; then
-            VERSION=$(grep -E "^mod\.version\s*=" stonecutter.properties.toml | cut -d'"' -f2 | tr -d '[:space:]')
+            VERSION=$(grep -E "^mod_version\s*=" gradle.properties | cut -d'=' -f2 | tr -d '[:space:]')
           fi
           if [ -z "$VERSION" ]; then
             echo "::error::Could not find 'version' or 'mod_version' in gradle.properties"
@@ -96,7 +93,7 @@ jobs:
           # Strip local developer Java home path if present
           sed -i '/^org\.gradle\.java\.home/d' gradle.properties
 
-          echo "=== Building Stonecutter projects (1.21.1, 26.1, 26.3) ==="
+          echo "=== Building root multi-version projects (1.20.1, 1.21.1, 1.21.11, 26.1) ==="
           ./gradlew build -x test --no-daemon
 
           if [ -f "26.1/forge/gradlew" ]; then
@@ -110,9 +107,7 @@ jobs:
           mkdir -p release_artifacts
 
           # Collect built loader jars from subproject modules
-          MODULE_DIRS=$(ls -d versions/* versions fabric-1.20.1 forge-1.20.1 neoforge-1.21.1 1.20.1 1.21.1 1.21.11 26.1 2>/dev/null || true)
-
-          find $MODULE_DIRS -type f -path "*/build/libs/*.jar" \
+          find versions 1.20.1 1.21.1 1.21.11 26.1 -type f -path "*/build/libs/*.jar" 2>/dev/null \
             ! -name "*-sources.jar" \
             ! -name "*-javadoc.jar" \
             ! -name "*-dev.jar" \
