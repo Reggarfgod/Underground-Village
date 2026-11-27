@@ -7,7 +7,7 @@
       "weight": 99,
       "element": {
         "location": "stoneholm:entities/villagers/regular",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -16,7 +16,7 @@
       "weight": 1,
       "element": {
         "location": "stoneholm:entities/villagers/nitwit",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

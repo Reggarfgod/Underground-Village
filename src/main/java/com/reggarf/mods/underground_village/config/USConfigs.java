@@ -31,6 +31,7 @@ public class USConfigs {
         // Direct compatibility references
         public final ConfigInt structureSize = underground.structureSize;
         public final ConfigInt maxDistanceFromCenter = underground.maxDistanceFromCenter;
+        public final ConfigBool enableBiomePalettes = underground.enableBiomePalettes;
 
         public final ConfigInt waterStructureSize = underwater.waterStructureSize;
         public final ConfigInt waterMaxDistanceFromCenter = underwater.waterMaxDistanceFromCenter;
@@ -72,6 +73,7 @@ public class USConfigs {
 
         public final ConfigInt structureSize = i(15, 1, 30, "structureSize", "Default size of underground village structures.");
         public final ConfigInt maxDistanceFromCenter = i(116, 1, 128, "maxDistanceFromCenter", "Maximum distance structure pieces can generate from the village center.");
+        public final ConfigBool enableBiomePalettes = b(true, "enableBiomePalettes", "Whether underground villages dynamically adapt their materials to match the surface biome.");
 
         @Override
         public String getName() {
@@ -92,8 +94,8 @@ public class USConfigs {
 
     public static class Placement extends ConfigBase {
 
-        public final ConfigInt placementSpacing = i(72, 1, 256, "placementSpacing", "Spacing between underground village placements (must be greater than separation).");
-        public final ConfigInt placementSeparation = i(32, 0, 255, "placementSeparation", "Minimum separation between underground village placements.");
+        public final ConfigInt placementSpacing = i(34, 1, 256, "placementSpacing", "Spacing between underground village placements (must be greater than separation).");
+        public final ConfigInt placementSeparation = i(8, 0, 255, "placementSeparation", "Minimum separation between underground village placements.");
 
         @Override
         public String getName() {

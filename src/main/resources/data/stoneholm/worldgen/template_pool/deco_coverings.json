@@ -5,7 +5,7 @@
     {
       "weight": 30,
       "element": {
-        "location": "minecraft:empty",
+        "location": "stoneholm:biome_palette",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

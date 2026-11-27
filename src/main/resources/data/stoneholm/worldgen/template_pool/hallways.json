@@ -5,7 +5,7 @@
     {
       "weight": 3,
       "element": {
-        "location": "stoneholm:hallways/v4/hallway_01",
+        "location": "stoneholm:hallways/hallway_01",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -14,7 +14,7 @@
     {
       "weight": 3,
       "element": {
-        "location": "stoneholm:hallways/v4/hallway_t",
+        "location": "stoneholm:hallways/hallway_t",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -23,7 +23,7 @@
     {
       "weight": 1,
       "element": {
-        "location": "stoneholm:hallways/v4/hallway_x",
+        "location": "stoneholm:hallways/hallway_x",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -32,7 +32,7 @@
     {
       "weight": 3,
       "element": {
-        "location": "stoneholm:hallways/v4/corner",
+        "location": "stoneholm:hallways/corner",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -42,7 +42,7 @@
     {
       "weight": 2,
       "element": {
-        "location": "stoneholm:hallways/v4/stair_01",
+        "location": "stoneholm:hallways/stair_01",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -52,7 +52,7 @@
     {
       "weight": 4,
       "element": {
-        "location": "stoneholm:hallways/v4/to_poi",
+        "location": "stoneholm:hallways/to_poi",
         "processors": "stoneholm:decayer",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

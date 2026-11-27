@@ -1,13 +1,37 @@
 {
   "replace": false,
   "values": [
+    "#minecraft:is_badlands",
     "#minecraft:is_forest",
     "#minecraft:is_hill",
     "#minecraft:is_jungle",
     "#minecraft:is_mountain",
+    "#minecraft:is_savanna",
     "#minecraft:is_taiga",
-    "minecraft:savanna",
-    "minecraft:savanna_plateau",
-    "minecraft:windswept_savanna"
+    "minecraft:desert",
+    "minecraft:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:snowy_plains",
+    "minecraft:ice_spikes",
+    "minecraft:snowy_taiga",
+    "minecraft:snowy_beach",
+    "minecraft:grove",
+    "minecraft:snowy_slopes",
+    "minecraft:jagged_peaks",
+    "minecraft:frozen_peaks",
+    "minecraft:stony_peaks",
+    "minecraft:meadow",
+    "minecraft:cherry_grove",
+    "minecraft:swamp",
+    "minecraft:mangrove_swamp",
+    "minecraft:dark_forest",
+    "minecraft:mushroom_fields",
+    "minecraft:windswept_hills",
+    "minecraft:windswept_gravelly_hills",
+    "minecraft:windswept_forest",
+    {
+      "id": "#c:is_overworld",
+      "required": false
+    }
   ]
 }

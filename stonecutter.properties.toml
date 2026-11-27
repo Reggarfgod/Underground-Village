@@ -1,7 +1,7 @@
 mod.id = "underground_village"
 mod.name = "Underground Village, Stoneholm"
 mod.group = "com.reggarf.mods"
-mod.version = "3.1.1"
+mod.version = "3.1.2"
 
 deps.fabric_loader = "0.20.1"
 loomx.loom_version = "1.19-SNAPSHOT"
@@ -31,7 +31,7 @@ deps.better_lib = "9320149"
 
 [neoforge."26.1"]
 mod.mc_compat = "[26.1, 26.2)"
-deps.neo_loader = "26.1.0.1-beta"
+deps.neo_loader = "26.1.0.19-beta"
 deps.better_lib = "9320152"
 
 ["26.3"]

@@ -26,3 +26,7 @@ hs_err_*.log
 replay_*.log
 *.hprof
 *.jfr
+
+# ai notes
+gemini.md
+GEMINI.md

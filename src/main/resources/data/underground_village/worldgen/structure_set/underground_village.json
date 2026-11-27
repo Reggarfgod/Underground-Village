@@ -1,15 +1,70 @@
 {
   "structures": [
     {
-      "structure": "underground_village:underground_village",
+      "structure": "underground_village:desert_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:badlands_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:jungle_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:plains_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:forest_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:taiga_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:snowy_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:savanna_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:swamp_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:dark_forest_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:cherry_grove_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:mushroom_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:mountain_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:ocean_village",
+      "weight": 1
+    },
+    {
+      "structure": "underground_village:village",
       "weight": 1
     }
   ],
   "placement": {
     "type": "underground_village:distance_based_structure_placement",
     "salt": 8699777,
-
-    "spacing": 72,
-    "separation": 32
+    "spacing": 34,
+    "separation": 8
   }
 }

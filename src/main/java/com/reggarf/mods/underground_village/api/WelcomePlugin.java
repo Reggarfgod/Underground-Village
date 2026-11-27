@@ -32,7 +32,7 @@ public class WelcomePlugin implements WelcomePopupPlugin {
 
     @Override
     public PopupTheme getTheme() {
-        return PopupTheme.RUSTIC;
+        return PopupTheme.MODERN;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class WelcomePlugin implements WelcomePopupPlugin {
         return WelcomePopupData.builder()
                 .title("Underground Villages")
                 .subtitle("SUBTERRANEAN EXPLORATION")
-                .theme(PopupTheme.RUSTIC)
+                .theme(PopupTheme.MODERN)
                 .accentColor(0xF7C742)
                 .addText("Underground Villages! adds naturally generated villages deep below the surface.", 0xFFFFFF)
                 .addText("Need help, found a bug, or missing a recipe or structure? Use command !report or the links below to get support and stay updated:", 0xCCCCCC)

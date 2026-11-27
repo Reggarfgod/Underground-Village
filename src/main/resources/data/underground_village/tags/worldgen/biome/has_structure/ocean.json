@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:is_ocean",
+    "#minecraft:is_deep_ocean",
+    "#minecraft:is_beach",
+    "minecraft:beach",
+    "minecraft:stony_shore",
+    {
+      "id": "#c:is_ocean",
+      "required": false
+    },
+    {
+      "id": "#c:is_deep_ocean",
+      "required": false
+    },
+    {
+      "id": "#c:is_beach",
+      "required": false
+    }
+  ]
+}

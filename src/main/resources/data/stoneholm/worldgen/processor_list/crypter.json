@@ -11,13 +11,12 @@
           },
           "location_predicate": {
             "predicate_type": "always_true"
-
-          }, "output_state": {
-          "Name": "minecraft:mossy_cobblestone"
-        }
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_cobblestone"
+          }
         },
         {
-
           "input_predicate": {
             "block": "minecraft:barrel",
             "probability": 0.85,
@@ -25,13 +24,14 @@
           },
           "location_predicate": {
             "predicate_type": "always_true"
-          },"output_state": {
-          "Name": "minecraft:cobblestone"
-        }
+          },
+          "output_state": {
+            "Name": "minecraft:cobblestone"
+          }
         },
         {
           "output_state": {
-            "Properties":{
+            "Properties": {
               "rotation": "12"
             },
             "Name": "minecraft:wither_skeleton_skull"
@@ -45,7 +45,6 @@
             "predicate_type": "always_true"
           }
         },
-        
         {
           "output_state": {
             "Name": "minecraft:air"
@@ -61,7 +60,7 @@
         },
         {
           "output_state": {
-            "Properties":{
+            "Properties": {
               "facing": "north",
               "lit": "false",
               "signal_fire": "false",
@@ -79,6 +78,9 @@
           }
         }
       ]
+    },
+    {
+      "processor_type": "underground_village:biome_palette"
     }
   ]
 }

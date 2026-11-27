@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:cherry_grove",
+    {
+      "id": "#c:is_cherry_grove",
+      "required": false
+    }
+  ]
+}

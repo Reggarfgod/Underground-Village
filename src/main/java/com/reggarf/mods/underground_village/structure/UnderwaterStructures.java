@@ -10,19 +10,24 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSetting
 //?}
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.reggarf.mods.underground_village.CommonClass;
+import com.reggarf.mods.underground_village.biome.BiomePalette;
+import com.reggarf.mods.underground_village.biome.BiomePaletteCache;
+import com.reggarf.mods.underground_village.biome.BiomePalettes;
 import com.reggarf.mods.underground_village.register.USRegistryAccess;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.QuartPos;
 //? if >=26.1 {
 import net.minecraft.resources.Identifier;
 //?} else {
-/*import net.minecraft.resources.ResourceLocation;
+/*import net.minecraft.resources.Identifier;
 *///?}
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.IronBarsBlock;
@@ -34,14 +39,18 @@ import net.minecraft.world.level.levelgen.WorldGenerationContext;
 import net.minecraft.world.level.levelgen.heightproviders.HeightProvider;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 
+import java.util.List;
 import java.util.Optional;
 
 public class UnderwaterStructures extends Structure {
+
+    private static final int MIN_CONNECTED_PIECES = 8;
 
     static final Direction[] DIRECTIONS = new Direction[] {
         Direction.NORTH,
@@ -76,8 +85,8 @@ public class UnderwaterStructures extends Structure {
         Blocks.STAINED_GLASS_PANE.green(),
         Blocks.STAINED_GLASS_PANE.red(),
         Blocks.STAINED_GLASS_PANE.black(),
-    };*/
-    //?} else {
+    };
+    *///?} else {
     static final net.minecraft.world.level.block.Block[] BARS = {
         Blocks.IRON_BARS,
         Blocks.GLASS_PANE,
@@ -106,7 +115,7 @@ public class UnderwaterStructures extends Structure {
                     instance.group(
                             UnderwaterStructures.settingsCodec(instance),
                             StructureTemplatePool.CODEC.fieldOf("start_pool").forGetter(s -> s.startPool),
-                            ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+                            Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
                             Codec.intRange(0, 30).fieldOf("size").forGetter(s -> 0),
                             HeightProvider.CODEC.fieldOf("start_height").forGetter(s -> s.startHeight),
                             Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(s -> s.projectStartToHeightmap),
@@ -122,24 +131,13 @@ public class UnderwaterStructures extends Structure {
                             //? if >=26.1 {
                             Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
                             //?} else {
-                            /*ResourceLocation.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
+                            /*Identifier.CODEC.optionalFieldOf("start_jigsaw_name").forGetter(s -> s.startJigsawName),
                             *///?}
-
-                            // Accepted from JSON but IGNORED (config used instead)
                             Codec.intRange(0, 30).fieldOf("size").forGetter(s -> 0),
-
                             HeightProvider.CODEC.fieldOf("start_height").forGetter(s -> s.startHeight),
-                            Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap")
-                                    .forGetter(s -> s.projectStartToHeightmap),
-
-                            // Accepted from JSON but IGNORED (config used instead)
+                            Heightmap.Types.CODEC.optionalFieldOf("project_start_to_heightmap").forGetter(s -> s.projectStartToHeightmap),
                             Codec.intRange(1, 128).fieldOf("max_distance_from_center").forGetter(s -> 0),
-
-                            DimensionPadding.CODEC.optionalFieldOf(
-                                    "dimension_padding",
-                                    JigsawStructure.DEFAULT_DIMENSION_PADDING
-                            ).forGetter(s -> s.dimensionPadding),
-
+                            DimensionPadding.CODEC.optionalFieldOf("dimension_padding", JigsawStructure.DEFAULT_DIMENSION_PADDING).forGetter(s -> s.dimensionPadding),
                             LiquidSettings.CODEC.optionalFieldOf(
                                     "liquid_settings",
                                     JigsawStructure.DEFAULT_LIQUID_SETTINGS
@@ -152,7 +150,7 @@ public class UnderwaterStructures extends Structure {
     //? if >=26.1 {
     private final Optional<Identifier> startJigsawName;
     //?} else {
-    /*private final Optional<ResourceLocation> startJigsawName;
+    /*private final Optional<Identifier> startJigsawName;
     *///?}
     private final HeightProvider startHeight;
     private final Optional<Heightmap.Types> projectStartToHeightmap;
@@ -165,7 +163,7 @@ public class UnderwaterStructures extends Structure {
     /*public UnderwaterStructures(
             StructureSettings settings,
             Holder<StructureTemplatePool> startPool,
-            Optional<ResourceLocation> startJigsawName,
+            Optional<Identifier> startJigsawName,
             int ignoredSize,
             HeightProvider startHeight,
             Optional<Heightmap.Types> projectStartToHeightmap,
@@ -184,7 +182,7 @@ public class UnderwaterStructures extends Structure {
             //? if >=26.1 {
             Optional<Identifier> startJigsawName,
             //?} else {
-            /*Optional<ResourceLocation> startJigsawName,
+            /*Optional<Identifier> startJigsawName,
             *///?}
             int ignoredSize,
             HeightProvider startHeight,
@@ -203,26 +201,45 @@ public class UnderwaterStructures extends Structure {
     }
     //?}
 
-    private static boolean extraSpawningChecks(GenerationContext context) {
-        ChunkPos chunkPos = context.chunkPos();
-        int x = chunkPos.getMiddleBlockX();
-        int z = chunkPos.getMiddleBlockZ();
-
-        int surfaceY = context.chunkGenerator().getBaseHeight(
-                x,
-                z,
-                Heightmap.Types.WORLD_SURFACE_WG,
-                context.heightAccessor(),
-                context.randomState()
-        );
-
-        return surfaceY > 40 && surfaceY < 100;
+    @Override
+    public Optional<GenerationStub> findValidGenerationPoint(GenerationContext context) {
+        return findGenerationPoint(context);
     }
 
     @Override
     public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
 
-        if (!extraSpawningChecks(context)) {
+        ChunkPos chunkPos = context.chunkPos();
+        int middleX = chunkPos.getMiddleBlockX();
+        int middleZ = chunkPos.getMiddleBlockZ();
+        int surfaceY = context.chunkGenerator().getBaseHeight(
+                middleX,
+                middleZ,
+                Heightmap.Types.WORLD_SURFACE_WG,
+                context.heightAccessor(),
+                context.randomState()
+        );
+
+        if (surfaceY <= 40 || surfaceY >= 100) {
+            return Optional.empty();
+        }
+
+        // Validate surface biome FIRST
+        //? if >=26.3 {
+        /*Holder<Biome> surfaceBiome = context.biomeResolver().getNoiseBiome(
+                QuartPos.fromBlock(middleX),
+                QuartPos.fromBlock(surfaceY),
+                QuartPos.fromBlock(middleZ)
+        );
+        *///?} else {
+        Holder<Biome> surfaceBiome = context.biomeSource().getNoiseBiome(
+                QuartPos.fromBlock(middleX),
+                QuartPos.fromBlock(surfaceY),
+                QuartPos.fromBlock(middleZ),
+                context.randomState().sampler()
+        );
+        //?}
+        if (!context.validBiome().test(surfaceBiome)) {
             return Optional.empty();
         }
 
@@ -234,7 +251,6 @@ public class UnderwaterStructures extends Structure {
                 )
         );
 
-        ChunkPos chunkPos = context.chunkPos();
         BlockPos blockPos = new BlockPos(
                 chunkPos.getMinBlockX(),
                 startY,
@@ -245,7 +261,7 @@ public class UnderwaterStructures extends Structure {
         int actualSize = CommonClass.CONFIG.waterStructureSize.get();
         int actualMaxDistance = CommonClass.CONFIG.waterMaxDistanceFromCenter.get();
 
-        return JigsawPlacement.addPieces(
+        Optional<GenerationStub> stubOpt = JigsawPlacement.addPieces(
                 context,
                 startPool,
                 startJigsawName,
@@ -267,6 +283,29 @@ public class UnderwaterStructures extends Structure {
                 liquidSettings
                 //?}
         );
+
+        if (stubOpt.isEmpty()) {
+            return Optional.empty();
+        }
+
+        GenerationStub rawStub = stubOpt.get();
+        List<StructurePiece> keptPieces = UndergroundStructure.filterExposedPieces(
+                context,
+                rawStub.getPiecesBuilder().build().pieces(),
+                Heightmap.Types.WORLD_SURFACE_WG
+        );
+        if (keptPieces.size() < MIN_CONNECTED_PIECES) {
+            return Optional.empty();
+        }
+
+        BiomePalette palette = BiomePalettes.getPaletteForBiome(surfaceBiome);
+        BiomePaletteCache.registerVillage(chunkPos, palette, actualMaxDistance);
+
+        return Optional.of(new GenerationStub(rawStub.position(), builder -> {
+            for (StructurePiece piece : keptPieces) {
+                builder.addPiece(piece);
+            }
+        }));
     }
 
     @Override
@@ -295,8 +334,8 @@ public class UnderwaterStructures extends Structure {
                         blockPos.set(x, y, z);
                         BlockState blockState = world.getBlockState(blockPos);
                         //? if >=26.3 {
-                        /*if (blockState.is(Blocks.CONCRETE.pink())) {*/
-                        //?} else {
+                        /*if (blockState.is(Blocks.CONCRETE.pink())) {
+                        *///?} else {
                         if (blockState.is(Blocks.PINK_CONCRETE)) {
                         //?}
                             if (

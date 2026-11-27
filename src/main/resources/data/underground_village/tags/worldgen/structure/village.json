@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "underground_village:desert_village",
+    "underground_village:badlands_village",
+    "underground_village:jungle_village",
+    "underground_village:plains_village",
+    "underground_village:forest_village",
+    "underground_village:taiga_village",
+    "underground_village:snowy_village",
+    "underground_village:savanna_village",
+    "underground_village:swamp_village",
+    "underground_village:dark_forest_village",
+    "underground_village:cherry_grove_village",
+    "underground_village:mushroom_village",
+    "underground_village:mountain_village",
+    "underground_village:ocean_village",
+    "underground_village:village"
+  ]
+}

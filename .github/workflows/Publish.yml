@@ -121,6 +121,56 @@ jobs:
           echo "version=${CLEAN_VERSION}" >> $GITHUB_OUTPUT
           echo "Version: ${CLEAN_VERSION} (Tag: ${TAG})"
 
+      - name: Extract changelog for current version
+        if: steps.filter.outputs.should_run == 'true'
+        env:
+          TARGET_VERSION: ${{ steps.mod_info.outputs.version }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'EOF'
+          import os
+          import re
+          from pathlib import Path
+
+          target_ver = os.environ["TARGET_VERSION"].split("+", 1)[0].strip()
+          repo = os.environ["REPO"]
+          sha = os.environ["SHA"]
+          lines = Path("Changelog.md").read_text(encoding="utf-8").splitlines()
+
+          def extract_section(pattern):
+              regex = re.compile(pattern, re.IGNORECASE)
+              other_ver = re.compile(r"^#\s+.*\[Version:")
+              sep = re.compile(r"^-{10,}\s*$")
+              capturing = False
+              collected = []
+              for line in lines:
+                  if not capturing:
+                      if regex.search(line):
+                          capturing = True
+                          collected.append(line)
+                  else:
+                      if sep.match(line) or other_ver.match(line):
+                          break
+                      collected.append(line)
+              while collected and not collected[-1].strip():
+                  collected.pop()
+              return "\n".join(collected)
+
+          section = extract_section(rf"^#\s+.*\[Version:{re.escape(target_ver)}\]")
+          if not section:
+              section = extract_section(r"^#\s+\[NEW\]")
+          if not section:
+              section = Path("Changelog.md").read_text(encoding="utf-8")
+
+          raw_base = f"https://raw.githubusercontent.com/{repo}/{sha}/.img/"
+          section = section.replace("](.img/", f"]({raw_base}").replace('src=".img/', f'src="{raw_base}')
+
+          Path("release_changelog.md").write_text(section + "\n", encoding="utf-8")
+          print("Extracted release_changelog.md:")
+          print(section)
+          EOF
+
       - name: Set up JDK 21
         if: steps.filter.outputs.should_run == 'true'
         uses: actions/setup-java@v4
@@ -166,4 +216,4 @@ jobs:
           loaders: ${{ matrix.loader }}
           version: ${{ steps.mod_info.outputs.tag }}+${{ matrix.project }}
           name: Underground Village ${{ steps.mod_info.outputs.version }} for ${{ matrix.mc_version }} (${{ matrix.loader_name }})
-          changelog-file: Changelog.md
+          changelog-file: release_changelog.md

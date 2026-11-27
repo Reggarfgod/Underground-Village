@@ -7,7 +7,7 @@
       "weight": 45,
       "element": {
         "location": "stoneholm:entrance/01",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -16,7 +16,7 @@
       "weight": 45,
       "element": {
         "location": "stoneholm:entrance/02",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -25,7 +25,7 @@
       "weight": 45,
       "element": {
         "location": "stoneholm:entrance/03",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -52,7 +52,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -61,7 +61,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance_02",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -70,7 +70,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance_03",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -79,7 +79,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance_04",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -88,7 +88,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance_05",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -97,7 +97,7 @@
       "weight": 20,
       "element": {
         "location": "stoneholm:entrance_06",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

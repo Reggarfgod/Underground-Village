@@ -7,7 +7,7 @@
       "weight": 1,
       "element": {
         "location": "stoneholm:entities/armor_stand/iron_boots",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -16,7 +16,7 @@
       "weight": 1,
       "element": {
         "location": "stoneholm:entities/armor_stand/iron_leggings",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -25,7 +25,7 @@
       "weight": 1,
       "element": {
         "location": "stoneholm:entities/armor_stand/iron_chest",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -34,7 +34,7 @@
       "weight": 1,
       "element": {
         "location": "stoneholm:entities/armor_stand/iron_helm",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -43,7 +43,7 @@
       "weight": 3,
       "element": {
         "location": "stoneholm:entities/armor_stand/leather_boots",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -52,7 +52,7 @@
       "weight": 3,
       "element": {
         "location": "stoneholm:entities/armor_stand/leather_pants",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -61,7 +61,7 @@
       "weight": 3,
       "element": {
         "location": "stoneholm:entities/armor_stand/leather_chest",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
@@ -70,7 +70,7 @@
       "weight": 3,
       "element": {
         "location": "stoneholm:entities/armor_stand/leather_helm",
-        "processors": "minecraft:empty",
+        "processors": "stoneholm:biome_palette",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

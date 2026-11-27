@@ -8,8 +8,8 @@ import com.mojang.serialization.MapCodec;
 import com.reggarf.mods.underground_village.structureplacement.DistanceBasedStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement;
 //? if >=26.3 {
-/*
-*///?} else {
+
+/**///?} else {
 import net.minecraft.world.level.levelgen.structure.placement.StructurePlacementType;
 //?}
 
