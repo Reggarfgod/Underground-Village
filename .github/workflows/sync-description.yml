@@ -59,9 +59,10 @@ jobs:
           import urllib.request
           from pathlib import Path
 
-          token = os.environ["MODRINTH_TOKEN"]
-          project_id = os.environ["MODRINTH_PROJECT_ID"]
+          token = os.environ["MODRINTH_TOKEN"].strip().strip('"').strip("'")
+          project_id = os.environ["MODRINTH_PROJECT_ID"].strip()
           body = Path("prepared_readme.md").read_text(encoding="utf-8")
+          user_agent = "Reggarfgod/Underground-Village (GitHub Actions)"
 
           payload = json.dumps({"body": body}).encode("utf-8")
           req = urllib.request.Request(
@@ -71,7 +72,7 @@ jobs:
               headers={
                   "Authorization": token,
                   "Content-Type": "application/json",
-                  "User-Agent": "Reggarfgod/Underground-Village (GitHub Actions)",
+                  "User-Agent": user_agent,
               },
           )
 
@@ -81,11 +82,32 @@ jobs:
           except urllib.error.HTTPError as e:
               err_body = e.read().decode("utf-8", errors="replace")
               print(f"::error::Failed to update Modrinth description (HTTP {e.code}): {err_body}")
-              print("::notice::Ensure MODRINTH_TOKEN has the 'Write Projects' (PROJECT_WRITE) scope at https://modrinth.com/settings/pats")
+
+              if e.code == 401:
+                  # Diagnose whether the token is expired/invalid vs. missing PROJECT_WRITE scope
+                  check_req = urllib.request.Request(
+                      "https://api.modrinth.com/v2/user",
+                      headers={"Authorization": token, "User-Agent": user_agent},
+                  )
+                  try:
+                      with urllib.request.urlopen(check_req) as uresp:
+                          user_data = json.loads(uresp.read().decode("utf-8"))
+                          print(
+                              f"::notice::MODRINTH_TOKEN authenticated as '{user_data.get('username')}', "
+                              "so the token is valid—it is missing the 'Edit projects' (PROJECT_WRITE) scope "
+                              f"or edit permission on project '{project_id}'."
+                          )
+                  except urllib.error.HTTPError:
+                      print(
+                          "::notice::MODRINTH_TOKEN itself was rejected by Modrinth (expired, revoked, or missing scopes). "
+                          "Create a new PAT at https://modrinth.com/settings/pats with both 'Write projects' and 'Create versions' scopes "
+                          "and update the MODRINTH_TOKEN secret in GitHub."
+                      )
               sys.exit(1)
           EOF
 
       - name: Upload prepared README for CurseForge copy-paste
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: curseforge-ready-readme
@@ -93,6 +115,7 @@ jobs:
           retention-days: 7
 
       - name: CurseForge notice
+        if: ${{ !cancelled() }}
         run: |
           {
             echo "### Project Description Sync"
