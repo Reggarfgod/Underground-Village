@@ -49,6 +49,9 @@ jobs:
               1.21.1
             loader: "fabric"
             loader_name: "Fabric"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
+              fabric-api(required){modrinth:P7dR8mSH}{curseforge:306612}
           - project: "1.21.1-neoforge"
             mc_version: "1.21.1"
             game_versions: |
@@ -56,26 +59,38 @@ jobs:
               1.21.1
             loader: "neoforge"
             loader_name: "NeoForge"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
           - project: "26.1-fabric"
             mc_version: "26.1"
             game_versions: "26.1"
             loader: "fabric"
             loader_name: "Fabric"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
+              fabric-api(required){modrinth:P7dR8mSH}{curseforge:306612}
           - project: "26.1-neoforge"
             mc_version: "26.1"
             game_versions: "26.1"
             loader: "neoforge"
             loader_name: "NeoForge"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
           - project: "26.3-fabric"
             mc_version: "26.3"
             game_versions: "26.3"
             loader: "fabric"
             loader_name: "Fabric"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
+              fabric-api(required){modrinth:P7dR8mSH}{curseforge:306612}
           - project: "26.3-neoforge"
             mc_version: "26.3"
             game_versions: "26.3"
             loader: "neoforge"
             loader_name: "NeoForge"
+            dependencies: |
+              better_lib(required){modrinth:2x0ULgTj}{curseforge:1150683}
 
     steps:
       - name: Checkout repository
@@ -214,6 +229,7 @@ jobs:
           files: versions/${{ matrix.project }}/build/libs/!(*-@(sources|dev)).jar
           game-versions: ${{ matrix.game_versions }}
           loaders: ${{ matrix.loader }}
+          dependencies: ${{ matrix.dependencies }}
           version: ${{ steps.mod_info.outputs.tag }}+${{ matrix.project }}
           name: Underground Village ${{ steps.mod_info.outputs.version }} for ${{ matrix.mc_version }} (${{ matrix.loader_name }})
           changelog-file: release_changelog.md

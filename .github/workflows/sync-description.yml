@@ -1,0 +1,102 @@
+name: Sync Project Description
+
+on:
+  push:
+    branches:
+      - Multi-Ver
+    paths:
+      - 'README.md'
+      - '.img/**'
+  workflow_dispatch:
+
+jobs:
+  sync-description:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare README with absolute image URLs
+        env:
+          REPO: ${{ github.repository }}
+          REF_SHA: ${{ github.sha }}
+        run: |
+          python3 - <<'EOF'
+          import os
+          from pathlib import Path
+
+          repo = os.environ["REPO"]
+          sha = os.environ["REF_SHA"]
+          raw_base = f"https://raw.githubusercontent.com/{repo}/{sha}/.img/"
+
+          content = Path("README.md").read_text(encoding="utf-8")
+          content = (
+              content.replace('src=".img/', f'src="{raw_base}')
+                     .replace("](.img/", f"]({raw_base}")
+                     .replace("](LICENSE)", f"](https://github.com/{repo}/blob/{sha}/LICENSE)")
+          )
+
+          Path("prepared_readme.md").write_text(content, encoding="utf-8")
+          print(f"Prepared README ({len(content)} chars) with raw image base: {raw_base}")
+          EOF
+
+      - name: Update Modrinth project description
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_PROJECT_ID: ${{ secrets.MODRINTH_PROJECT_ID || 'KmyhssPl' }}
+        run: |
+          if [ -z "$MODRINTH_TOKEN" ]; then
+            echo "::warning::MODRINTH_TOKEN secret is not set; skipping Modrinth description sync."
+            exit 0
+          fi
+
+          python3 - <<'EOF'
+          import json
+          import os
+          import sys
+          import urllib.error
+          import urllib.request
+          from pathlib import Path
+
+          token = os.environ["MODRINTH_TOKEN"]
+          project_id = os.environ["MODRINTH_PROJECT_ID"]
+          body = Path("prepared_readme.md").read_text(encoding="utf-8")
+
+          payload = json.dumps({"body": body}).encode("utf-8")
+          req = urllib.request.Request(
+              f"https://api.modrinth.com/v2/project/{project_id}",
+              data=payload,
+              method="PATCH",
+              headers={
+                  "Authorization": token,
+                  "Content-Type": "application/json",
+                  "User-Agent": "Reggarfgod/Underground-Village (GitHub Actions)",
+              },
+          )
+
+          try:
+              with urllib.request.urlopen(req) as resp:
+                  print(f"Modrinth description updated successfully (HTTP {resp.status})")
+          except urllib.error.HTTPError as e:
+              err_body = e.read().decode("utf-8", errors="replace")
+              print(f"::error::Failed to update Modrinth description (HTTP {e.code}): {err_body}")
+              print("::notice::Ensure MODRINTH_TOKEN has the 'Write Projects' (PROJECT_WRITE) scope at https://modrinth.com/settings/pats")
+              sys.exit(1)
+          EOF
+
+      - name: Upload prepared README for CurseForge copy-paste
+        uses: actions/upload-artifact@v4
+        with:
+          name: curseforge-ready-readme
+          path: prepared_readme.md
+          retention-days: 7
+
+      - name: CurseForge notice
+        run: |
+          {
+            echo "### Project Description Sync"
+            echo "- **Modrinth**: Automatically updated via Modrinth API (\`PATCH /v2/project/${{ secrets.MODRINTH_PROJECT_ID || 'KmyhssPl' }}\`)."
+            echo "- **CurseForge**: CurseForge does not provide an official API endpoint to update project descriptions using an API token."
+            echo "  - Download the \`curseforge-ready-readme\` artifact from this run (which has full GitHub raw image URLs) to paste into your CurseForge project description page."
+          } >> "$GITHUB_STEP_SUMMARY"
